@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  content: MyText
+  priority: MyString
+  finished_at: 2017-01-03 19:34:28
+  datey: one
+  user: one
+
+two:
+  title: MyString
+  content: MyText
+  priority: MyString
+  finished_at: 2017-01-03 19:34:28
+  datey: two
+  user: two

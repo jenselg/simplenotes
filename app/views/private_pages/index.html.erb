@@ -1,0 +1,105 @@
+<div class="container">
+    
+<%= calendar(number_of_days: 1, attribute: :finished_at, events: @finished_notes) do |date, notes| %>
+
+    <% if date == Date.today # If it's today duh %>
+            <div class="row">
+                <div class="col-md-12">
+                    
+                    <table class="table table-condensed" style="background: transparent;">
+                        <tbody>
+                        <%= simple_form_for @note, html: { class: 'form-inline' } do |f| %>
+                            <tr>
+                                <td style="border: 0;"><%= f.button :submit, "Create Note", class: 'btn btn-success btn-54px' %></td>
+                                <td style="width: 100%; border: 0;"><%= f.input :content, label: false, placeholder: "Type your memo here" %></td>
+                            </tr>
+                        <% end %>
+                        </tbody>
+                    </table>
+            
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <% if @notes.any? %>
+                        <table class="table table-condensed" style="background: transparent;">
+                            <tbody>
+                                <% @notes.each do |note| %>
+                                    <% if note.finished_at == nil # If note is unfinished %>
+                                        <tr>
+                                            <td class="text-center" style="border-top: 0;">
+                                                <%= link_to finish_path(note.id), method: :post do %>
+                                                    <span style="color: orange;"><i class="fa fa-circle-thin fa-2x" aria-hidden="true"></i></span>
+                                                <% end %>
+                                            </td>
+                                            <td style="width: 100%; border-top: 0;"><%= note.content %></td>
+                                        </tr>
+                                    <% elsif (note.finished_at != nil) && (note.finished_at.to_date == Date.today.to_date) # If note is finished and the date is today %>
+                                        <tr>
+                                            <td class="text-center" style="border-top: 0;">
+                                                <span style="color: #5cb85c;"><i class="fa fa-check-circle fa-2x" aria-hidden="true"></i></span>
+                                            </td>
+                                            <td style="width: 100%; border-top: 0;">
+                                                <%= note.content %>&nbsp;
+                                                <%= link_to note_path(note), method: :delete do %>
+                                                    <i class="fa fa-trash" style="color: red;"></i>
+                                                <% end %>
+                                            </td>
+                                        </tr>
+                                    <% end %>
+                                <% end %>
+                            </tbody>
+                        </table>
+                        
+                    <% else %>
+                        <div class="panel panel-default">
+                            <div class="panel-body text-center">
+                                <span>You have no pending notes for today.</span>
+                            </div>
+                        </div>
+                    <% end %>
+                </div>
+            </div>
+            
+    <% else # If it's not today %>
+    
+        <div class="row">
+            <div class="col-md-12">
+                <% if @finished_notes.any? %>
+                    <table class="table table-condensed" style="background: transparent;">
+                        <tbody>
+                            <% @finished_notes.each do |note| %>
+                                <% if (note.finished_at != nil) && (date == note.finished_at) # If note is finished and the date is whatever the parameter date is %>
+                                    <tr>
+                                        <td class="text-center" style="border-top: 0;">
+                                            <span style="color: #5cb85c;"><i class="fa fa-check-circle fa-2x" aria-hidden="true"></i></span>
+                                        </td>
+                                        <td style="width: 100%; border-top: 0;">
+                                            <%= note.content %>&nbsp;
+                                            <%= link_to note_path(note), method: :delete do %>
+                                                <i class="fa fa-trash" style="color: red;"></i>
+                                            <% end %>
+                                        </td>
+                                    </tr>
+                                
+                                <% end %>
+                            <% end %>
+                        </tbody>
+                    </table>
+                    
+                <% else %>
+                
+                    <div class="panel panel-default">
+                        <div class="panel-body text-center">
+                            <span>You have no pending notes for today.</span>
+                        </div>
+                    </div>
+                <% end %>
+            </div>
+        </div>        
+    
+    <% end %>
+        
+<% end %>
+</div>
